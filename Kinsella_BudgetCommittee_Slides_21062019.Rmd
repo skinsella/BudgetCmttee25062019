@@ -1,0 +1,109 @@
+---
+title: "Enhancing Ireland’s Capacity for Analysis and Action on Fiscal Policy"
+author: "Stephen Kinsella | University of Limerick"
+affiliation: "University of Limerick"
+date: "2019-06-22"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggthemes)
+library(tidyverse)
+library(readxl)
+library(ggrepel)
+library(reshape2)
+library(CGPfunctions)
+library(tint)
+```
+
+# Fiscal Impact by Crisis Type
+
+```{r}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "CL2")
+ggplot(data = filter(historicalspending, Impact > 1))+aes(x = Type, y = Impact, color=Type)+geom_point()+
+  labs(caption = "Source: Bova et al, (2016)")+
+  annotate("text", x = "Legal", y = 39, label = "Ireland",parse = TRUE)+ 
+  theme(legend.position = "none")+ xlab("")+ylab("% GDP")
+```
+
+# Fiscal Impact Over Time
+
+```{r}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "CL2")
+ggplot(data = filter(historicalspending, Start > 2000))+aes(x = Start, y = Impact, color=Type)+geom_point()+labs(caption = "Source: Bova et al, (2016)")+
+  annotate("text", x = 2009, y = 39, label = "Ireland",parse = TRUE)+ xlab("")+ylab("% GDP")+theme(legend.position = "bottom", legend.title = element_blank())
+```
+
+
+# Growth and volatility of the main tax categories, 1984 - 2017
+
+```{r}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "taxvol")
+ggplot(data=historicalspending)+aes(x=`Volatility`, y = `Rate`, label=Label)+
+  geom_point()+
+  geom_label_repel(aes(label = Label)) +
+  labs(caption = "Source: PBO")+
+  xlab("Volatility, %")+ylab("Mean Rate of Growth, %")
+```
+
+# Sources of Tax Revenue
+
+```{r}
+fig4 <- read_excel("~/Dropbox/OUP_Politics_Chapte/OUP_Politics_Handbook_Data.xlsx", sheet = "Sheet3")
+fig4 <- melt(fig4, id='Year')
+ggplot(fig4, aes(x = Year, y = value, fill = variable, label = value)) +
+  geom_bar(stat = "identity") +
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ylab("%")+xlab("")+labs(caption="Source: Department of Public Expenditure and Reform") + theme(legend.position="bottom", legend.title = element_blank())+theme_tint()
+```
+
+
+# Uses of Tax Revenue
+
+
+```{r}
+#Figure 5 Uses of Taxation
+fig5 <- read_excel("~/Dropbox/OUP_Politics_Chapte/OUP_Politics_Handbook_Data.xlsx", sheet = "Sheet6")
+fig5 <- melt(fig5, id='Year')
+ggplot(fig5, aes(x = Year, y = value, fill = variable, label = value)) +
+  geom_bar(stat = "identity") + 
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ylab("% of total government expenditure")+xlab("")+labs(caption="Source: Department of Public Expenditure and Reform")+ theme(legend.position="bottom", legend.title = element_blank() )+scale_x_continuous(breaks = round(seq(min(fig5$Year), max(fig5$Year), by = 1),1))+theme_tint()
+```
+
+# Comparison of Proportionate Spending by Country
+
+```{r}
+fig7 <- read_excel("~/Dropbox/OUP_Politics_Chapte/OUP_Politics_Handbook_Data.xlsx", sheet = "gbreakdown")
+ggplot(fig7, aes(x = Country, y = Value, fill = Variable, label = Value)) +
+  geom_bar(stat = "identity") +coord_flip()+
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ylab("%")+xlab("")+labs(subtitle="% of total government expenditure", caption="Source: OECD")+ theme(legend.position="bottom", legend.title = element_blank())+theme_tint()
+```
+
+# The Musgrave Framework
+
+![Source: Allen et al, 2013.](musgrave3.pdf)
+
+# The Budget Cycle
+
+![Source: IMF, 2019.](cycle3.pdf)
+
+
+# The Nationl Debate we need to get away from
+
+![Source: Common Sense](increment2.pdf)
+
+
+# The level of uncertainty in the current moment: GDP (Volume) forecasts
+
+```{r}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "gdpheat")
+historicalspending <- melt(historicalspending, id.vars='Year')
+ggplot(data=historicalspending)+aes(x=Year, y = value, color=variable)+geom_line()+theme_tint()+ylab("2015 = 100, Real GDP Volume")+xlab("")+theme(legend.position="bottom", legend.title = element_blank())+labs(caption="Source: IFAC")
+```
+
+# Summary
+
+1.	Ireland risks replaying the 2007-9 period of dramatic cuts to public expenditure on its currently forecasted path of spending increases.
+2.	This Committee should sponsor the development of a fiscal stress testing methodology and develop plans to deploy automatic rules on expenditure. 
+3.	This Committee must complete the medium term fiscal- and budget- framework development processes for the State. These are strategic development of the public finances, especially with regard to helping solve the climate crisis. 
+4.  The institutional architecture required to deal with these risks to Ireland’s public financial management is not yet complete. The Committee should work to integrate the assessments of the Climate, Fiscal, and Risk advisory functions of the State through its offices with an integrated report and associated actions.

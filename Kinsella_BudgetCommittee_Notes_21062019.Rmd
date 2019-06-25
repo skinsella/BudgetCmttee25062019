@@ -1,0 +1,179 @@
+---
+title: "Enhancing Ireland’s Capacity for Analysis and Action on Fiscal Policy"
+author: "Stephen Kinsella | University of Limerick"
+affiliation: "UL"
+date: "`r Sys.Date()`"
+output: tint::tintPdf
+bibliography: skeleton.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tint)
+# invalidate cache when the package version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tint'), fig.margin=TRUE, cache=TRUE, echo=FALSE)
+options(htmltools.dir.version = FALSE)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(ggthemes)
+library(tidyverse)
+library(readxl)
+library(ggrepel)
+library(reshape2)
+library(CGPfunctions)
+```
+
+
+```{r fig.margin=TRUE, fig.cap="Fiscal Impact of Crises by Type" , fig.height = 6, fig.width = 6}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "CL2")
+ggplot(data = filter(historicalspending, Impact > 1))+aes(x = Type, y = Impact, color=Type)+geom_point()+
+  labs(caption = "Source: Bova et al, (2016)")+
+  annotate("text", x = "Legal", y = 39, label = "Ireland",parse = TRUE)+ 
+  theme(legend.position = "none")+ xlab("")+ylab("% GDP")+theme_tint()
+```
+
+
+```{r fig.height = 6, fig.width = 6, fig.cap="Fiscal Impact of Crises by Type, 2000-2015"}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "CL2")
+ggplot(data = filter(historicalspending, Start > 2000))+aes(x = Start, y = Impact, color=Type)+geom_point()+labs(caption = "Source: Bova et al, (2016)")+
+  annotate("text", x = 2009, y = 39, label = "Ireland",parse = TRUE)+ xlab("")+ylab("% GDP")+theme(legend.position = "bottom", legend.title = element_blank())+theme_tint()
+```
+
+# Summary
+1.	Ireland risks replaying the 2007-9 period of dramatic cuts to public expenditure on its currently forecasted path of spending increases. Every major report for the last 12 months has highlighted these risks. 
+2.	This Committee should sponsor the development of a fiscal stress testing methodology. Fiscal stress tests to the public finances are necessary because of the volatility of certain tax heads. Automatic rules on expenditure ceilings and floors may be necessary to cope with increased volatility in the short term. The time to implement this methodology is now, when the state's finances are strong. 
+3.	This Committee must complete the medium term fiscal- and budget- framework development processes for the State. These are strategic development of the public finances, especially with regard to helping solve the climate crisis. 
+4.The institutional architecture required to deal with these risks to Ireland’s public financial management is not yet complete. The Committee should work to integrate the assessments of the Climate, Fiscal, and Risk advisory functions of the State through its offices with an integrated report and associated actions.
+
+
+```{r , fig.height = 6, fig.width = 6, fig.cap="Growth and volatility of the main tax categories, 1984 - 2017"}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "taxvol")
+ggplot(data=historicalspending)+aes(x=`Volatility`, y = `Rate`, label=Label)+
+  geom_point()+
+  geom_label_repel(aes(label = Label)) +
+  labs(caption = "Source: PBO")+
+  xlab("Volatility, %")+ylab("Mean Rate of Growth, %")+theme_tint()
+```
+
+
+# Introductory remarks
+
+Ireland is a dual economy. One, highly productive, multinational-dominated sector accounted for over 14% of total employment in 2017, roughly 283,000 people. It is well known a small number of mostly multinational firms account for most of our corporation tax. Recent European Commission, Fiscal Advisory Council, IMF Article IV, and Department of Finance reports have highlighted some of the risks associated with over reliance on volatile tax heads. Despite these risks, it must be acknowledged the contribution of the multinational sector to the Irish society in terms of wages paid, taxes on wages, consumption taxes, and corporate taxes is large, and growing. 
+
+
+A second part of our economy is the domestic one enjoying growth in employment, reductions in unemployment, inward economic migration, and increases in both household gross income and consumption. This structural duality has been a source of macroeconomic strength for decades^[See Chapter 6 of Roche, W. K., O'Connell, P. J., & Prothero, A. (Eds.). (2016). *Austerity and Recovery in Ireland: Europe's Poster Child and the Great Recession*. Oxford University Press.]. 
+
+It is worth reminding the Committee of the scale of the 2007-2009 crisis in fiscal terms. The first figure shows the fiscal impact, in terms of GDP, of several types of crisis--financial, legal, natural, public-private partnership, private and corporate, state-owned enterprise (SOE) and subnational, across the world. Ireland's financial crisis ranks fourth in terms of the impact it had on our finances in the entire dataset^[Data are from *The Fiscal Costs of Contingent Liabilities: A New Dataset*; by Elva Bova, Marta Ruiz-Arranz, Frederik Toscani, and H. Elif Ture; IMF Working Paper WP/16/14; February 2016. pp.1–55.]. 
+
+```{r, fig.width=6, fig.height=6, fig.cap="Sources of Tax Revenue"}
+fig4 <- read_excel("~/Dropbox/OUP_Politics_Chapte/OUP_Politics_Handbook_Data.xlsx", sheet = "Sheet3")
+fig4 <- melt(fig4, id='Year')
+ggplot(fig4, aes(x = Year, y = value, fill = variable, label = value)) +
+  geom_bar(stat = "identity") +
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ylab("%")+xlab("")+labs(caption="Source: Department of Public Expenditure and Reform") + theme(legend.position="bottom", legend.title = element_blank())+theme_tint()
+```
+
+The second figure shows the occurence of these fiscal crises across the world since the year 2000. Again, Ireland's extremely negative fiscal experience is highlighted. Financial risks appear as both a macroeconomic shock affecting multiple sectors--including the government--at the same time, and as the need to intervene to save financial sectors. The 'big government' and 'big bank' responses occur in tandem, as Minskey (1986) reminds us^[Minsky, H (1986) *Stabilizing an Unstable Economy*, McGraw Hill Professional.].
+
+```{r fig.width=6, fig.height=6, fig.cap="Uses of Tax Revenue"}
+#Figure 5 Uses of Taxation
+
+fig5 <- read_excel("~/Dropbox/OUP_Politics_Chapte/OUP_Politics_Handbook_Data.xlsx", sheet = "Sheet6")
+fig5 <- melt(fig5, id='Year')
+ggplot(fig5, aes(x = Year, y = value, fill = variable, label = value)) +
+  geom_bar(stat = "identity") + 
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ylab("% of total government expenditure")+xlab("")+labs(caption="Source: Department of Public Expenditure and Reform")+ theme(legend.position="bottom", legend.title = element_blank() )+scale_x_continuous(breaks = round(seq(min(fig5$Year), max(fig5$Year), by = 1),1))+theme_tint()
+```
+# Types of fiscal risk
+
+There are several types of fiscal risk. These include unreported deficits, issues with state-owned enterprises and PPP type projects, contingent liabilities in the form of pensions and other large issues, stimulus and austerity measures, and macroeconomic risks such as Brexit. Drawing on the same IMF database, the next figure shows the median cost by type of crisis, and the probability of that risk occurring. 
+
+
+```{r fig.height=12, fig.width=8, fig.cap="Comparison of Spending by Country"}
+fig7 <- read_excel("~/Dropbox/OUP_Politics_Chapte/OUP_Politics_Handbook_Data.xlsx", sheet = "gbreakdown")
+ggplot(fig7, aes(x = Country, y = Value, fill = Variable, label = Value)) +
+  geom_bar(stat = "identity") +coord_flip()+
+  geom_text(size = 3, position = position_stack(vjust = 0.5))+ylab("%")+xlab("")+labs(subtitle="% of total government expenditure", caption="Source: OECD")+ theme(legend.position="bottom", legend.title = element_blank())+theme_tint()
+```
+
+The third figure reproduces a recent analysis by economists at the new Parliamentary Budget Office. It computes the volatility of Ireland's large tax heads relative to their mean rate of growth. This approach considers the tax heads as financial assets, which of course, from the perspective of the state, they are. The two clearly volatile elements are corporation taxes, and property taxes. Ireland has a very low in take from property taxes, so, while they are volatile, the impact on the state's finances is relatively limited. I consider it not coincidental that corporation taxes and stamp duty display similarly high rates of growth, and high levels of volatility. 
+
+Figures 4, and 5 show the evolution of the Irish economy in terms of the sources and uses of taxation revenue. Figure 6 offers an international comparison of the proportion of government spending by large vote. 
+
+A key risk to the Irish economy is an increasing dependence on volatile tax revenues. The way to manage that risk is using sensible fiscal benchmarks adopted at this point in the economic cycle. 
+
+
+# Management of the public finances
+
+The aim of fiscal policy is to allocate resources efficiently and distribute wealth in an equitable way. The dual-structure of the Irish economy makes it both easier and more difficult to succeed in this aim.
+
+A key fiscal policy objective that applies in most countries is expenditure efficiency and inclusive growth^[See Allen, R., Hemming, R., & Potter, B. (Eds.). (2013). *The International Handbook of Public Financial Management*. Springer.]. The aims of good public financial management are to aid a government’s decision-making to achieve expenditure efficiency and inclusive growth. 
+
+\marginnote{\includegraphics[]{musgrave3.pdf}}
+These include: 
+
+1.	Improving the public’s understanding of the need for sound fiscal policies by preparing and publishing credible long-term forecasts;
+2.	Making clear the costs and distributional aspects of both long- and short- term policy choices;
+3.	Emphasizing the need to prioritize collective responsibility over narrow sectoral interests; and
+4.	Strengthening the credibility of fiscal policy announcements by regularly publicly comparing actual fiscal outcomes to their announced costs and benefits over time. 
+
+\marginnote{\includegraphics[]{cycle3.pdf}}
+
+One commonly used framework is the Musgrave three-function approach to public finance. The figure to the right shows a common explanation of the framework. Musgrave's framework highlights three main and overlapping fiscal policy functions of government – allocation, distribution and stabilization. Allocation and distribution are understood as microeconomic functions. The government redirects resources to provide economic, social and administrative infrastructure, and generates or funds services to support growth and economic development, and to transfer income and purchasing power from the advantaged to the disadvantaged to improve social outcomes.
+
+\marginnote{\includegraphics[]{increment2.pdf}}
+
+The efficiency and equity improvements that result from this process contribute to sustainable growth. Stabilization is understood as a macroeconomic function in the Musgrave framework, where counter-cyclical policies have to be deployed to stabilise the growth rate of output. In all of this, the annual budget cycle is the key instrument of policy-making and the pre- and post-budget preparation and implementation cycles are the main tools of fiscal policy implementation. That cycle is represented to the right. The key elements of this for the consideration of this Committee are coloured. 
+
+Institutionally, Ireland has added many of the key layers of public financial management, including a parliamentary budget office, an economics secretariat in IGEES, this Oversight Committee, and a fiscal council. However the two key medium term fiscal and budgetary frameworks remain an issue because it is there that the strategic thinking about the composition of taxation and expenditure can be discussed, and adjustment processes debated and discussed. 
+
+At the top, fiscal objectives and rules may be set by a fiscal responsibility framework. This is given to us by the EU. Then, the medium-term fiscal framework sets multiyear targets that are coherent with the objectives and rules. The medium-term budget framework allocates expenditure across different sectors over several years. The medium-term budget framework must be consistent with the aggregate targets set in the fiscal responsibility framework. Finally, the annual budget is more detailed, by expenditure item. The annual budget should be within the allocation set out in the medium-term budget framework. In the end, these instruments and processes contribute to achieving the fiscal objectives contained within the Musgrave framework.
+
+
+| Fiscal Policy Objective                 | Fiscal Management Instrument | Institutional Requirement                           |
+|---------------------------------------------|-------------------------------|--------------------------------------------|
+| *Macro stability*                           | Medium term fiscal framework  | Revenue forecasting capacity               |
+|                                             |                               | Comprehensive budget                       |
+|                                             |                               | Internal control                           |
+|                                             | Fiscal Rules                  | Accounting and reporting standards         |
+|                                             |                               | Effective monitoring                       |
+|                                             | Fiscal Transparency           | Annual Fiscal policy statement             |
+|                                             |                               | Citizen’s Guide to the budget              |
+|                                             |                               | Timely fiscal reporting                    |
+|                                             | Fiscal Risk controls          | External Audit                             |
+|                                             |                               | Disclosure of non-debt liabilities         |
+| *Spending efficiency/inclusive growth*      | Medium term budget framework  | Top down and bottom up budgeting processes |
+|                                             |                               | Unified current & capital budget           |
+|                                             | Public investment planning    | Project appraisal capacity                 |
+|                                             |                               | Public/Private partnership guidelines      |
+|                                             |                               | Asset management strategies                |
+|                                             | Performance budgeting         | Program-based budget classification        |
+|                                             |                               | Performance monitoring systems             |
+
+
+The traditional approach to fiscal policy views the main fiscal aggregates of expenditure, revenue, the fiscal balance, debt, etc., as fiscal policy instruments that can be used to address market failures, inequality and output variations. A modern public financial system's effectiveness depends on it being grounded in law, and benefiting from supportive regulations, and administrative practices rooted in well-developed institutions. The annual budget determines policy delivery in countries through the allocation of government monies or funds to certain areas, or priorities. The state of the macroeconomy often determines what can be done. There is a significant difference between a wish list and what is doable, and very few fiscal systems exist where all areas are satisfied simultaneously. Not only are fiscal policy, and fiscal space determined by the overarching legal framework, but at each stage of the budget cycle, there are existing institutions of public financial management, systems, and processes. As you can see, the plumbing is quite complicated at the legal and institutional level. 
+
+This is because fiscal aggregates are now routinely used to define targets for fiscal policy. The structure of spending and taxation reflects their use as fiscal policy instruments, as does the nature of interventions such as privatisation and fiscal decentralisation, but a great deal of emphasis has come to be placed on fiscal management instruments as an essential complement to effective macro-fiscal targeting and the successful deployment of fiscal policy instruments. The table below breaks these issues out in slightly more detail.
+
+
+# Fiscal stress tests and new automatic stabilisers
+
+
+```{r fig.cap="Highly uncertain near term environment.", fig.height=5, fig.width=5}
+historicalspending <- read_excel("historicalspending.xlsx",sheet = "gdpheat")
+historicalspending <- melt(historicalspending, id.vars='Year')
+ggplot(data=historicalspending)+aes(x=Year, y = value, color=variable)+geom_line()+theme_tint()+ylab("2015 = 100, Real GDP Volume")+xlab("")+theme(legend.position="bottom", legend.title = element_blank())+labs(caption="Source: IFAC")
+```
+
+It is by now obvious that Ireland requires a more robust fiscal system to withstand macroeconomic shocks, and this system should comprise a medium term, strategic arm, an accounting and verification arm, and the annual budget cycle. These new elements of institutional architecture should also be charged with the discovery of potential risks, and their mitigation. One key tool in discovering where we are weak is the fiscal stress test. As of now the state's finances are roughly balanced. An increase in expenditure will result in a deficit, which must be paid for by issuing sovereign debt, or by increased tax receipts. Simply put, for a given year, in a fiscal stress test, you increase expenditure in, say, Health, by 10%, and see what happens to government debt. For a tax head, say income tax, you decrease it by 15%, and you see what happens to government debt. You repeat this for a range of scenarios, and then figure out policies to offset these stresses--which can be both positive and negative in nature. 
+
+Another tool is the production of new automatic stabilisers, such as automatic increases in transfer and capital spending, that kick in when unemployment is above a pre-defined crisis threshold, say 10%. Automatic extensions to increase benefits during periods of extremely high unemployment help to reduce the impact of any downturn on the poorest in our society. The key recognition here is that it is hard to design such programmes when a crisis is happening in real-time. If these measures are designed, legislated for, and administratively provisioned for, well ahead of time, then they can be deployed automatically, as can new taxation increases on elements like property^[See the Hamilton Project, *Recession Ready: Fiscal Policies to Stabilize the American Economy*, http://www.hamiltonproject.org/.].
+
+# Conclusion
+
+It is worth reminding the Committee how uncertain the times ahead are. Figure 7 shows the forecasts from the Central Bank and from the ESRI's Brexit scenario model. Depending on the outcome of the Brexit negotiations, the moves to alter international tax treatments, and the impact of climate change policies, our economy may be in a very different place in 24 months' time. The appropriate time to consider changes to the fiscal architecture of the State is now, while these risks are, as yet, unrealised. 
+
+I thank the Committee's Chair and the Clerk of the Committee for the opportunity to appear before you. 
+
+
